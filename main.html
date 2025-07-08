@@ -207,9 +207,9 @@ body.dark footer {
 <body>
 
   <header>
-    수수료 계산기
-    <button class="dark-toggle" title="다크모드 토글" aria-label="Toggle Dark Mode">🌓</button>
-  </header>
+  <span id="title-text" style="cursor:pointer;">수수료 계산기</span>
+  <button class="dark-toggle" title="다크모드 토글" aria-label="Toggle Dark Mode">🌓</button>
+</header>
 
   <div class="container">
     <!-- 원가 입력 -->
@@ -223,7 +223,7 @@ body.dark footer {
     <div class="section">
       <label>할인 쿠폰 (%)</label>
       <div class="row">
-        <span id="discountDisplay">0%</span>
+        <span id="discountDisplay">30%</span>
         <button onclick="changeDiscount(5)">▲</button>
         <button onclick="changeDiscount(-5)">▼</button>
       </div>
@@ -243,7 +243,7 @@ body.dark footer {
   </div>
 
   <script>
-    let discount = 0;
+    let discount = 30;
 
     // 다크모드 토글
     const darkToggleBtn = document.querySelector('.dark-toggle');
@@ -266,6 +266,10 @@ body.dark footer {
       localStorage.setItem('darkMode', darkModeOn);
       applyDarkMode(darkModeOn);
     });
+
+	  document.getElementById('title-text').addEventListener('click', () => {
+    	  location.reload();
+    	});
 
     // 숫자 3자리마다 콤마 포맷
     const formatNumberWithComma = (value) => {
