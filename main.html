@@ -230,6 +230,8 @@ body.dark footer {
       <div class="row" style="margin-top: 12px;">
         <label for="pcCheck">PC방 할인</label>
         <input type="checkbox" id="pcCheck" />
+        <label for="topClassCheck" style="margin-left: 20px;">TOP CLASS</label>
+    <input type="checkbox" id="topClassCheck" />
       </div>
     </div>
 
@@ -329,41 +331,44 @@ body.dark footer {
     });
 
     function calculate() {
-      const rawVal = priceInput.value.replace(/,/g, '');
-      const priceInputNum = rawVal ? parseInt(rawVal, 10) : NaN;
-      const isPc = document.getElementById('pcCheck').checked;
+    	  const rawVal = priceInput.value.replace(/,/g, '');
+    	  const priceInputNum = rawVal ? parseInt(rawVal, 10) : NaN;
+    	  const isPc = document.getElementById('pcCheck').checked;
+    	  const isTopClass = document.getElementById('topClassCheck').checked;
 
-      if (isNaN(priceInputNum) || priceInputNum <= 0) {
-        alert('유효한 원가(억 단위)를 입력하세요.');
-        return;
-      }
+    	  if (isNaN(priceInputNum) || priceInputNum <= 0) {
+    	    alert('유효한 원가(억 단위)를 입력하세요.');
+    	    return;
+    	  }
 
-      const 원가 = priceInputNum * 100000000;
-      const 기본수수료 = 원가 * 0.4;
-      const 할인금액 = 기본수수료 * (discount / 100);
-      const pc감면 = isPc ? 기본수수료 * 0.3 : 0;
-      const 최종수수료 = 기본수수료 - 할인금액 - pc감면;
-      const 수령금액 = 원가 - 최종수수료;
+    	  const 원가 = priceInputNum * 100000000;
+    	  const 기본수수료 = 원가 * 0.4;
+    	  const 할인금액 = 기본수수료 * (discount / 100);
+    	  const pc감면 = isPc ? 기본수수료 * 0.3 : 0;
+    	  const topClass감면 = isTopClass ? 기본수수료 * 0.2 : 0;
+    	  const 최종수수료 = 기본수수료 - 할인금액 - pc감면 - topClass감면;
+    	  const 수령금액 = 원가 - 최종수수료;
 
-      const formatLine = (title, value, sign = '') => {
-        if (value === 0) return '';
-        const absValue = Math.abs(value);
-        return `<div class="row-line"><span>${title}</span><span class="right">${sign}${formatLargeUnitWithComma(absValue)}</span></div>`;
-      };
+    	  const formatLine = (title, value, sign = '') => {
+    	    if (value === 0) return '';
+    	    const absValue = Math.abs(value);
+    	    return `<div class="row-line"><span>${title}</span><span class="right">${sign}${formatLargeUnitWithComma(absValue)}</span></div>`;
+    	  };
 
-      const resultHTML = `
-        <div><span class="bold">입력된 원가:</span> ${formatLargeUnitWithComma(원가)}</div>
-        <br/>
-        <div><span class="bold">계산 내역:</span></div>
-        ${formatLine('원가', 원가)}
-        ${formatLine('기본 수수료(-40%)', -기본수수료, '-')}
-        ${formatLine(`할인 쿠폰(+${discount}%)`, 할인금액, '+')}
-        ${formatLine(`PC방 할인${isPc ? ' (+30%)' : ''}`, pc감면, '+')}
-        <div class="row-line bold"><span>최종 금액</span><span class="right">${formatLargeUnitWithComma(수령금액)}</span></div>
-      `;
+    	  const resultHTML = `
+    	    <div><span class="bold">입력된 원가:</span> ${formatLargeUnitWithComma(원가)}</div>
+    	    <br/>
+    	    <div><span class="bold">계산 내역:</span></div>
+    	    ${formatLine('원가', 원가)}
+    	    ${formatLine('기본 수수료(-40%)', -기본수수료, '-')}
+    	    ${formatLine(`할인 쿠폰(+${discount}%)`, 할인금액, '+')}
+    	    ${formatLine(`PC방 할인${isPc ? ' (+30%)' : ''}`, pc감면, '+')}
+    	    ${formatLine(`TOP CLASS 할인${isTopClass ? ' (+20%)' : ''}`, topClass감면, '+')}
+    	    <div class="row-line bold"><span>최종 금액</span><span class="right">${formatLargeUnitWithComma(수령금액)}</span></div>
+    	  `;
 
-      document.getElementById('result').innerHTML = resultHTML;
-    }
+    	  document.getElementById('result').innerHTML = resultHTML;
+    	}
   </script>
 	<footer>
   &copy; 2025. Byeon Sung Hyun. All rights reserved.
